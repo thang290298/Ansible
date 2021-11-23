@@ -54,23 +54,23 @@ Ansible được sử dụng rất nhiều trong triển khai phần mềm và q
 - Tại `Management Node` kiểm soát toàn bộ quá trình thực thi của pkaybook. Inventory cung cấp danh sách các máy chủ cần chạy các Modules Ansible
 - Management Node quản lý tạo kết nối ssh và thực thi các Modules nhỏ trên máy chủ và cài đặt phần mềm
 
-# VI. Các khái niểm sử dụng trong Ansible
+# VI. Các khái niệm sử dụng trong Ansible
 
-- **Controller Machine**: Là máy cài Ansible, nó sẽ chịu trách nhiệm quản lý, điều khiển và gửi các task đến những máy con cần quản lý.
-- **Inventory**: Là file chứa thông tin những server cần quản lý. File này thường nằm tại đường dẫn /etc/ansible/hosts.
-- **Playbook**: Là file chứa các task được ghi dưới định dạng YAML. Máy controller sẽ đọc các task này trong Playbook sau đó đẩy các lệnh thực thi tương ứng bằng Python xuống các máy con.
-- **Task**: Một block ghi lại những tác vụ cần thực hiện trong playbook và các thông số liên quan.
-- **Module**: Trong Ansible có rất nhiều module khác nhau. Ansible hiện có hơn 2000 module để thực hiện các tác vụ khác nhau, bạn cũng có thể tự viết thêm những module của mình khi có nhu cầu. Một số Module thường dùng cho những thao tác đơn giản như: System, Commands, Files, Database, Cloud, Windows,...
-- **Role**: Là một tập playbook đã được định nghĩa để thực thi 1 tác vụ nhất định. Nếu bạn có nhiều server, mỗi server thực hiện những tasks riêng biệt. Và khi này nếu chúng ta viết tất cả vào cùng một file playbook thì khá là khó để quản lý. Do vậy roles sẽ giúp bạn phân chia khu vực với nhiệm vụ riêng biệt.
-- **Play**: là quá trình thực thi một playbook.
+- `**Controller Machine**`: Là máy cài Ansible, nó sẽ chịu trách nhiệm quản lý, điều khiển và gửi các task đến những máy con cần quản lý.
+- `**Inventory**`: Là file chứa thông tin những server cần quản lý. File này thường nằm tại đường dẫn /etc/ansible/hosts.
+- `**Playbook**`: Là file chứa các task được ghi dưới định dạng YAML. Máy controller sẽ đọc các task này trong Playbook sau đó đẩy các lệnh thực thi tương ứng bằng Python xuống các máy con.
+- `**Task**`: Một block ghi lại những tác vụ cần thực hiện trong playbook và các thông số liên quan.
+- `**Module**`: Trong Ansible có rất nhiều module khác nhau. Ansible hiện có hơn 2000 module để thực hiện các tác vụ khác nhau, bạn cũng có thể tự viết thêm những module của mình khi có nhu cầu. Một số Module thường dùng cho những thao tác đơn giản như: System, Commands, Files, Database, Cloud, Windows,...
+- `**Role**`: Là một tập playbook đã được định nghĩa để thực thi 1 tác vụ nhất định. Nếu bạn có nhiều server, mỗi server thực hiện những tasks riêng biệt. Và khi này nếu chúng ta viết tất cả vào cùng một file playbook thì khá là khó để quản lý. Do vậy roles sẽ giúp bạn phân chia khu vực với nhiệm vụ riêng biệt.
+- `**Play**`: là quá trình thực thi một playbook.
 
-- **Facts**: Thông tin của những máy được Ansible điều khiển, cụ thể sẽ là các thông tin về OS, system, network,…
+- `**Facts**`: Thông tin của những máy được Ansible điều khiển, cụ thể sẽ là các thông tin về OS, system, network,…
 
-- **Handlers**: Được sử dụng để kích hoạt những thay đổi của dịch vụ như start, stop service.
+- `**Handlers*`*: Được sử dụng để kích hoạt những thay đổi của dịch vụ như start, stop service.
     
-- **Variables**: Được dùng để lưu trữ các giá trị và có thể thay đổi được giá trị đó. Để khai báo biến, người dùng chỉ cần sử dụng thuộc tính vars đã được Ansible cung cấp sẵn.
+- `**Variables**`: Được dùng để lưu trữ các giá trị và có thể thay đổi được giá trị đó. Để khai báo biến, người dùng chỉ cần sử dụng thuộc tính vars đã được Ansible cung cấp sẵn.
     
-- **Conditions**: Ansible cho phép người dùng điều hướng lệnh chạy hay giới hạn phạm vi để thực hiện câu lệnh nào đó. Hay nói cách khác, khi thỏa mãn điều kiện thì câu lệnh mới được thực thi. Ngoài ra, Ansible còn cung cấp thuộc tính Register, một thuộc tính giúp nhận câu trả lời từ một câu lệnh. Sau đó ta có thể sử dụng chính kết quả đó để chạy những câu lệnh sau.
+- `**Conditions**`: Ansible cho phép người dùng điều hướng lệnh chạy hay giới hạn phạm vi để thực hiện câu lệnh nào đó. Hay nói cách khác, khi thỏa mãn điều kiện thì câu lệnh mới được thực thi. Ngoài ra, Ansible còn cung cấp thuộc tính Register, một thuộc tính giúp nhận câu trả lời từ một câu lệnh. Sau đó ta có thể sử dụng chính kết quả đó để chạy những câu lệnh sau.
 
 Ansible là công cụ giúp chuẩn bị trước và quản lý cấu hình, nó là cách đơn giản và dễ nhất để bắt đầu bởi nó chỉ sử dụng SSH để kết nối Server và chạy các Task được cấu hình từ trước. Ansible cũng giúp chúng ta dễ dàng chuyển đổi một Bash script thành các task trong Ansible cho quá trình quản lý. Ngoài ra, trước khi chạy các Task, người dùng có thể nhìn nhận trước ngữ cảnh và xử lý những giới hạn của chúng.
 
