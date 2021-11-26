@@ -12,8 +12,8 @@ Trong đó:
 
   ## 2. IP Planning
 
-| Hostname | hardware | Interface |
-|--------------|-------|------|
-| Node1 | 2 CPU - 2GB RAM - 30GB Disk| eth0: 10.10.13.31  (MNGT)- eth1: 10.10.11.31|
-| MariaDB-2 | 2 CPU - 2GB RAM - 30GB Disk| eth0: 10.10.13.32 (MNGT)- eth1: 10.10.11.32|
-| MariaDB-3 | 2 CPU - 2GB RAM - 30GB Disk| eth0: 10.10.13.33 (MNGT)- eth1: 10.10.11.33|
+| Hostname | hardware | Interface | Disk OS | Disk 1 | Disk 2 | Disk 3 |
+|--------------|-------|------|------|------|------|------|
+| Node1-ctl | 3 CPU - 3GB RAM| ens3: 172.16.7.1 |25GB | 30GB | 30GB | 30GB |
+| Node2 | 3 CPU - 3GB RAM| ens3: 172.16.7.2 |25GB | 30GB | 30GB | 30GB |
+| Node3 |  3 CPU - 3GB RAM| ens3: 172.16.7.3|25GB | 30GB | 30GB | 30GB |
