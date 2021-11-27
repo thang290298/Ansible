@@ -237,3 +237,13 @@ ansible-playbook -i /etc/ansible/hosts /home/ansible/file/apache.yml
 - kiểm tra 
 
 <h3 align="center"><img src="../03-Images/15.png"></h3>
+
+# IV. Tài liệu hướng dẫn
+
+- [1] https://linoxide.com/ansible-playbook-to-install-and-setup-apache-on-ubuntu/
+
+- [2] https://github.com/phancong0897/Congphan/blob/master/Ansible/L%C3%BD%20Thuy%E1%BA%BFt/Asible-playbook.md
+
+- [3] https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html
+
+- [4] https://www.scaleway.com/en/docs/tutorials/install-apache-ansible/
