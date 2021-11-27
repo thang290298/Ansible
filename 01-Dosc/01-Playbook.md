@@ -192,7 +192,7 @@ root@node1-ctl:/home/ansible/file#
         dest: "/etc/apache2/sites-available/{{ http_conf }}"
       notify: restart-apache
 
-    - name: Permisson virtuahHost
+    - name: Symlink virtuahHost
       shell: |
         sudo ln -s /etc/apache2/sites-available/{{ http_conf }} /etc/apache2/sites-enabled/
         sudo apachectl configtest

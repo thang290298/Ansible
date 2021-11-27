@@ -71,6 +71,7 @@ Ansible được sử dụng rất nhiều trong triển khai phần mềm và q
 - `**Variables**`: Được dùng để lưu trữ các giá trị và có thể thay đổi được giá trị đó. Để khai báo biến, người dùng chỉ cần sử dụng thuộc tính vars đã được Ansible cung cấp sẵn.
     
 - `**Conditions**`: Ansible cho phép người dùng điều hướng lệnh chạy hay giới hạn phạm vi để thực hiện câu lệnh nào đó. Hay nói cách khác, khi thỏa mãn điều kiện thì câu lệnh mới được thực thi. Ngoài ra, Ansible còn cung cấp thuộc tính Register, một thuộc tính giúp nhận câu trả lời từ một câu lệnh. Sau đó ta có thể sử dụng chính kết quả đó để chạy những câu lệnh sau.
+- `**template**`: Các Template được sử dụng để thiết lập các cấu hình, cho phép sử dụng các biến và các tính năng khác với mục đính làm cho các tệp trở nên linh hoạt hơn và dễ dàng sử dung lại
 
 Ansible là công cụ giúp chuẩn bị trước và quản lý cấu hình, nó là cách đơn giản và dễ nhất để bắt đầu bởi nó chỉ sử dụng SSH để kết nối Server và chạy các Task được cấu hình từ trước. Ansible cũng giúp chúng ta dễ dàng chuyển đổi một Bash script thành các task trong Ansible cho quá trình quản lý. Ngoài ra, trước khi chạy các Task, người dùng có thể nhìn nhận trước ngữ cảnh và xử lý những giới hạn của chúng.
 

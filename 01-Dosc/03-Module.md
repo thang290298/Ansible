@@ -185,7 +185,17 @@
     enabled: yes
 
 ```
+## 7. shell
 
+Trong Ansible, chúng ta có shell module được sử dụng để chạy các lệnh thông qua shell (/bin/sh) trên các máy đích từ xa. Module này nhận các lệnh làm đầu vào cùng với một tập hợp các đối số.
+
+Ví dụ:
+```sh
+    - name: Symlink virtuahHost
+      shell: |
+        sudo ln -s /etc/apache2/sites-available/{{ http_conf }} /etc/apache2/sites-enabled/
+        sudo apachectl configtest
+```
 # II. Tài liệu Tham Khảo
 
 

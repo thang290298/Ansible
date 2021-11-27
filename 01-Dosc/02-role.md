@@ -13,6 +13,18 @@
   - `inventory`: là tệp tin chứa thông tin ansible host mà chúng ta sẽ khai báo, thay vì sử dụng tệp tin cấu hình mặc định tại đường dẫn **/etc/ansible/hosts**
   - `playbook.yml`: là tệp tin playbook chứa thông tin các play. Nếu không tổ chức playbook theo cấu trúc thư mục thì tất cả thông tin về tasks, templates, vars, … mà chạy của mỗi play sẽ được liệt kê trong một tệp playbook. Với cấu trúc thư mục, chúng ta chỉ cần khai báo thông tin về play mà có các roles sẽ chạy, khi đó nó sẽ có nhiệm vụ gọi đến tasks được khai báo trong các tệp tin cấu hình ở thư mục roles ở trên.
 
+
+# II. Cấu trúc Role
+> Không nhất thiết phải sử dụng tất cả các thư mục ở trên khi tạo một role.
+
+- `Task`: Chứa các file yaml định nghĩa các nhiệm vụ chính khi triển khai.
+- `Handles`: Chứa các handler được sử dụng trong role
+- `Files`: chứa các file dc sử dụng bởi role, ví dụ như các file ảnh.
+- `Templates`: chứa các template file được sử dụng trong role, ví dụ như các file configuration... Các file này có đuôi *.j2, sử dụng jinja2 syntax
+- `Vars`: định nghĩa các variable được sử dụng ở trong roles
+- `Defaults`: Định nghĩa các giá trị default của các variable được sử dụng trong roles. Nếu variable không được định nghiã trong thư mục vars, các giá trị default này sẽ được gọi.
+- `Meta`: thư mục này chứa meta data của roles
+
 # II. Ví dụ về Role
 
  đây là ví dụ về 1 role đơn giản 
