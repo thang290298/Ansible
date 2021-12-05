@@ -1,0 +1,74 @@
+```
+# Tạo thư mục chưa source code và file config
+- name: Create Folder Source code
+  file:
+    path="{{ local_DocumentRoot }}"
+    owner: www-data
+    group: www-data
+    mode: 0775
+    state: directory
+
+-  name: Create Folder file config
+  file:
+    path="{{ local_conf }}"
+    mode: 0775
+    state: directory
+
+
+# Pull image docker
+- name: Pull image PHP 
+  docker_image:
+    name: "{{ Image_PHP }}"
+    source: pull
+
+# Pull image docker
+- name: Pull image httpd
+  docker_image:
+    name: "{{ Image_Apache }}"
+    source: pull
+
+# Create Network local
+- name: Create a network with options
+  docker_network:
+    name: php-httpd
+    driver_options:
+      com.docker.network.bridge.name: net2
+    ipam_options:
+      subnet: '172.16.29.0/16'
+      gateway: 172.16.29.1
+      iprange: '172.16.29.0/24'
+# Coppy file
+- name: Coppy file index.php
+  template:
+    src: "templates/index.php.j2"
+    dest: ""{{ local_DocumentRoot }}"/index.html"
+
+- name: Coppy file httpd.conf
+  template:
+    src: "templates/httpd.conf.j2"
+    dest: ""{{ local_DocumentRoot }}"/httpd.conf"
+
+# Create container
+- name: Create a docker container php7.4
+  docker_container:
+    name: "{{ name_php_container }}"
+    image: "{{ Image_PHP }}"
+    volumes:
+      - "{{ local_DocumentRoot }}":"{{ container_DocumentRoot }}"
+    network:
+      - php-httpd
+    restart: always
+
+- name: Create a docker container apache
+  docker_container:
+    name: "{{ name_apache_container }}"
+    image: "{{ Image_Apache }}"
+    volumes:
+      - "{{ local_DocumentRoot }}":"{{ container_DocumentRoot }}"
+      - "{{ local_conf }}"/httpd.conf:"{{ container_conf }}"/httpd.conf
+    network:
+      - php-httpd
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: always

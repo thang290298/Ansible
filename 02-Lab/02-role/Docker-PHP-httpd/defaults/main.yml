@@ -1,2 +1,10 @@
 ---
-ServerRoot: /usr/local/apache2/htdocs
+name_php_container: lab-php
+name_apache_container: lab-apache
+Image_PHP: php:7.4-fpm
+Image_Apache: httpd
+local_DocumentRoot: /var/www/
+container_DocumentRoot: /usr/local/apache2/htdocs
+local_conf: /etc/apache2/
+container_conf: /usr/local/apache2/htdocs
+
