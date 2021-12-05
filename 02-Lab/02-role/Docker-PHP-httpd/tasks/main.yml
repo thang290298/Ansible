@@ -1,18 +1,12 @@
-```
+---
 # Tạo thư mục chưa source code và file config
-- name: Create Folder Source code
+- name: Creates directory
   file:
-    path="{{ local_DocumentRoot }}"
-    owner: www-data
-    group: www-data
-    mode: 0775
+    path: "{{ item }}"
     state: directory
-
--  name: Create Folder file config
-  file:
-    path="{{ local_conf }}"
-    mode: 0775
-    state: directory
+  with_items:
+  - "{{ local_DocumentRoot }}"
+  - "{{ local_conf }}"
 
 
 # Pull image docker
@@ -30,33 +24,30 @@
 # Create Network local
 - name: Create a network with options
   docker_network:
-    name: php-httpd
-    driver_options:
-      com.docker.network.bridge.name: net2
-    ipam_options:
-      subnet: '172.16.29.0/16'
-      gateway: 172.16.29.1
-      iprange: '172.16.29.0/24'
+    name: "{{ network }}"
+
 # Coppy file
 - name: Coppy file index.php
   template:
     src: "templates/index.php.j2"
-    dest: ""{{ local_DocumentRoot }}"/index.html"
+    dest: "{{ local_DocumentRoot }}/index.php"
 
 - name: Coppy file httpd.conf
   template:
-    src: "templates/httpd.conf.j2"
-    dest: ""{{ local_DocumentRoot }}"/httpd.conf"
+    src: "templates//httpd.conf.j2"
+    dest: "{{ local_conf }}/httpd.conf"
 
 # Create container
+
 - name: Create a docker container php7.4
   docker_container:
     name: "{{ name_php_container }}"
     image: "{{ Image_PHP }}"
     volumes:
-      - "{{ local_DocumentRoot }}":"{{ container_DocumentRoot }}"
+      - "{{ local_DocumentRoot }}:{{ container_DocumentRoot }}"
     network:
-      - php-httpd
+      - "{{ network }}"
+    state: present
     restart: always
 
 - name: Create a docker container apache
@@ -64,11 +55,54 @@
     name: "{{ name_apache_container }}"
     image: "{{ Image_Apache }}"
     volumes:
-      - "{{ local_DocumentRoot }}":"{{ container_DocumentRoot }}"
-      - "{{ local_conf }}"/httpd.conf:"{{ container_conf }}"/httpd.conf
+      - "{{ local_DocumentRoot }}:{{ container_DocumentRoot }}"
+      - "{{ local_conf }}/httpd.conf:{{ container_conf }}/httpd.conf"
     network:
-      - php-httpd
+      - "{{ network }}"
     ports:
-      - '80:80'
-      - '443:443'
+      - '{{ http_port }}:{{ http_port }}'
+      - '{{ https_port }}:{{ https_port }}'
+    state: present
     restart: always
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- name: Create a docker container php7.4
+  shell: |
+    docker run -d --name {{ name_php_container }} -h php -v {{ local_DocumentRoot }}:{{ container_DocumentRoot }} --network {{ network }} {{ Image_PHP }}
+
+- name: Create a docker container  apache
+  shell: |
+    docker run -di -p {{ http_port }}:{{ http_port }} -p {{ https_port }}:{{ https_port }} --name {{ name_apache_container }} -h httpd -v {{ local_DocumentRoot }}:{{ container_DocumentRoot }} -v {{ local_conf }}/httpd.conf:{{ container_conf }}/httpd.conf --network {{ network }} {{ Image_Apache }}
+
+- name: config php7.4
+  shell: |
+    docker exec -it {{ name_php_container }}
+    docker-php-ext-configure opcache --enable-opcache && docker-php-ext-install opcache
+    cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+
+
+- name: "UFW firewall allow HTTP on port"
+  ufw:
+    rule: allow
+    port: 
+      - "{{ http_port }}"
+      - "{{ https_port }}"
+    proto: tcp

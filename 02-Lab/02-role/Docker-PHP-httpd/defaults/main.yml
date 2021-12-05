@@ -1,10 +1,11 @@
 ---
 name_php_container: lab-php
-name_apache_container: lab-apache
+name_apache_container: lab-httpd
 Image_PHP: php:7.4-fpm
 Image_Apache: httpd
-local_DocumentRoot: /var/www/
+local_DocumentRoot: /var/www
 container_DocumentRoot: /usr/local/apache2/htdocs
-local_conf: /etc/apache2/
-container_conf: /usr/local/apache2/htdocs
-
+local_conf: /etc/apache2
+container_conf: /usr/local/apache2/conf
+http_port: 80
+https_port: 443
