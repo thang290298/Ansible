@@ -1,0 +1,11 @@
+```
+- name: checking service status docker
+  command: systemctl status "{{ item }}"
+  with_items:
+  - docker
+  register: result
+  ignore_errors: yes
+
+- name: showing report
+  debug:
+   var: result
