@@ -10,7 +10,7 @@
 
 
 # Pull image docker
-- name: Pull image PHP 
+- name: Pull image PHP
   docker_image:
     name: "{{ Image_PHP }}"
     source: pull
@@ -25,7 +25,12 @@
 - name: Create a network with options
   docker_network:
     name: "{{ network }}"
-
+    driver_options:
+      com.docker.network.bridge.name: net2
+    ipam_options:
+      subnet: '172.16.29.0/16'
+      gateway: 172.16.29.1
+      iprange: '172.16.29.0/24'
 # Coppy file
 - name: Coppy file index.php
   template:
@@ -45,10 +50,7 @@
     image: "{{ Image_PHP }}"
     volumes:
       - "{{ local_DocumentRoot }}:{{ container_DocumentRoot }}"
-    network:
-      - "{{ network }}"
-    state: present
-    restart: always
+    state: started
 
 - name: Create a docker container apache
   docker_container:
@@ -57,52 +59,16 @@
     volumes:
       - "{{ local_DocumentRoot }}:{{ container_DocumentRoot }}"
       - "{{ local_conf }}/httpd.conf:{{ container_conf }}/httpd.conf"
-    network:
-      - "{{ network }}"
     ports:
       - '{{ http_port }}:{{ http_port }}'
       - '{{ https_port }}:{{ https_port }}'
-    state: present
-    restart: always
+    state: started
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-- name: Create a docker container php7.4
-  shell: |
-    docker run -d --name {{ name_php_container }} -h php -v {{ local_DocumentRoot }}:{{ container_DocumentRoot }} --network {{ network }} {{ Image_PHP }}
-
-- name: Create a docker container  apache
-  shell: |
-    docker run -di -p {{ http_port }}:{{ http_port }} -p {{ https_port }}:{{ https_port }} --name {{ name_apache_container }} -h httpd -v {{ local_DocumentRoot }}:{{ container_DocumentRoot }} -v {{ local_conf }}/httpd.conf:{{ container_conf }}/httpd.conf --network {{ network }} {{ Image_Apache }}
-
-- name: config php7.4
-  shell: |
-    docker exec -it {{ name_php_container }}
-    docker-php-ext-configure opcache --enable-opcache && docker-php-ext-install opcache
-    cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
-
-
-- name: "UFW firewall allow HTTP on port"
-  ufw:
-    rule: allow
-    port: 
-      - "{{ http_port }}"
-      - "{{ https_port }}"
-    proto: tcp
+- name: Add a container to a network, leaving existing containers connected
+  docker_network:
+    name: "{{ network }}"
+    connected:
+      - "{{ name_php_container }}"
+      - "{{ name_apache_container }}"
+    appends: yes

@@ -9,3 +9,4 @@ local_conf: /etc/apache2
 container_conf: /usr/local/apache2/conf
 http_port: 80
 https_port: 443
+network: php-httpd
