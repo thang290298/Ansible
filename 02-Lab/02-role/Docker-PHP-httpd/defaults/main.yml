@@ -10,3 +10,6 @@ container_conf: /usr/local/apache2/conf
 http_port: 80
 https_port: 443
 network: php-httpd
+subnet: '172.16.29.0/16'
+gateway: 172.16.29.1
+iprange: '172.16.29.0/24'

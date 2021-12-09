@@ -28,9 +28,9 @@
     driver_options:
       com.docker.network.bridge.name: net2
     ipam_options:
-      subnet: '172.16.29.0/16'
-      gateway: 172.16.29.1
-      iprange: '172.16.29.0/24'
+      subnet: "{{ subnet }}"
+      gateway: "{{ gateway }}"
+      iprange: "{{ iprange }}"
 # Coppy file
 - name: Coppy file index.php
   template:
