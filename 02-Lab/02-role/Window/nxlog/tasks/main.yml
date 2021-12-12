@@ -9,13 +9,13 @@
     path: "{{ INSTALLDIR }}"
     state: directory
 
-- - name: Coppy file agent nxlog
+- name: Coppy file agent nxlog
   ansible.windows.win_copy:
     src: "file/{{ Agent_Nxlog }}"
     dest: "{{ Folder_Agent }}"
 
 - name: Installed Nxlog via win_command
-  win_command: msiexec /i {{ Folder_Agent }}\{{ Agent_Nxlog }} /qb INSTALLDIR="{{ INSTALLDIR }}"
+  win_command: msiexec /i {{ Folder_Agent }}\{{ Agent_Nxlog }} /qb INSTALLDIR={{ INSTALLDIR }}
   wait: yes
 
   
@@ -29,3 +29,6 @@
     src: "templates/nxlog.conf.j2"
     dest: "{{ file_config }}"
   notify: Restart-nxlog
+
+- name: Reboot WinServer
+  ansible.windows.win_reboot:
