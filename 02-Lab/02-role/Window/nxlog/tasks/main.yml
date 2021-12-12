@@ -4,27 +4,28 @@
     path: "{{ Folder_Agent }}"
     state: directory
 
+- name: Create folder install Nxlog
+  ansible.windows.win_file:
+    path: "{{ INSTALLDIR }}"
+    state: directory
+
 - - name: Coppy file agent nxlog
   ansible.windows.win_copy:
-    src: "file/nxlog.conf.j2"
-    dest: "{{ CONFIGDIR }}/nxlog.conf"
+    src: "file/{{ Agent_Nxlog }}"
+    dest: "{{ Folder_Agent }}"
 
-- name: Check if 7-Zip is already installed
-  win_reg_stat:
-    name: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{23170F69-40C1-2702-1701-000001000000}
-  register: 7zip_installed
-
-- name: Ensure 7-Zip is installed via win_command
-  win_command: C:\Windows\System32\msiexec.exe /i C:\temp\7z.msi /qn /norestart
-  when: 7zip_installed.exists == false
+- name: Installed Nxlog via win_command
+  win_command: msiexec /i {{ Folder_Agent }}\{{ Agent_Nxlog }} /qb INSTALLDIR="{{ INSTALLDIR }}"
+  wait: yes
 
   
 - name: Remove file Config nxlog.conf
   ansible.windows.win_file:
-    path: "{{ CONFIGDIR }}/nxlog.conf"
+    path: "{{ file_config }}"
     state: absent
 
 - name: Coppy file config nxlog
   ansible.windows.win_copy:
     src: "templates/nxlog.conf.j2"
-    dest: "{{ CONFIGDIR }}/nxlog.conf"
+    dest: "{{ file_config }}"
+  notify: Restart-nxlog

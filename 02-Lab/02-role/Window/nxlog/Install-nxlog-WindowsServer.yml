@@ -1,0 +1,7 @@
+---
+- name: Setup Docker on Ubuntu20.14
+  hosts: Winserver
+  become: yes
+
+  roles:
+      - nxlog
