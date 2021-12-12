@@ -1,0 +1,6 @@
+---
+INSTALLDIR: C:\nxlog
+CONFIGDIR: C:\nxlog\conf
+Folder_Agent: C:\agentnxlog
+
+msiexec /i nxlog-5.4.7313_windows_x64.msi /q INSTALLDIR="C:\nxlog"
