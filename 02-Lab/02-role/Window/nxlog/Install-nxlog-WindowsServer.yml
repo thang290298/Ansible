@@ -1,5 +1,5 @@
 ---
-- name: Setup Docker on Ubuntu20.14
+- name: Setup Nxlog on Windows Server
   hosts: Winserver
   become: yes
 
