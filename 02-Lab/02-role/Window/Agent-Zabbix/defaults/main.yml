@@ -1,0 +1,9 @@
+---
+INSTALLFOLDER: 'C:\Program Files\zabbix'
+AGENTFOLDER: 'C:\zabbix_agent'
+LOGFILE: 'C:\Program Files\zabbix\zabbix.log'
+SERVER: '172.16.7.4'
+LISTENPORT: '10050'
+SERVERACTIVE: '172.16.7.5'
+HOSTNAME: 'Windows Server 2016'
+ENABLEPATH: '1'
