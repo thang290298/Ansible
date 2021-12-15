@@ -14,9 +14,10 @@
   when: Create_folder is changed
   register: coppy_agent
 
+# Giai nen file Agent Zabbix
 - name: Unzip zabbix-agent
   win_unzip:
-    src: "{{ ZABBIXFOLDER }}\zabbix_agent.zip"
+    src: "{{ ZABBIXFOLDER }}zabbix_agent.zip"
     dest: "{{ ZABBIXFOLDER }}"
     delete_archive: true
   when: coppy_agent is changed
@@ -26,29 +27,35 @@
 - name: Coppy file zabbix_agentd.conf
   win_template:
     src: "templates/zabbix_agentd.conf.j2"
-    dest: "{{ fILE_CONF }}\zabbix_agentd.conf"
+    dest: "{{ ZABBIXFOLDER }}{{ fILE_CONF }}zabbix_agentd.conf"
     force: true
 
-
+# Cai dat Agent Zabbix
 - name: Install Agent Zabbix
-  win_shell: "{{ FILE_SETUP }}\zabbix_agentd.exe --config {{ fILE_CONF }}\zabbix_agentd.conf --config"
+  win_shell: CMD /C  "{{ ZABBIXFOLDER }}{{ FILE_SETUP }}zabbix_agentd.exe --config {{ ZABBIXFOLDER }}{{ fILE_CONF }}zabbix_agentd.conf --install"
   when: unzip_zabbix_agent is changed
 
-- name: Add firewall rule 
+# khoi dong Agent Zabbix
+- name: Start_zabbix_agent
+  win_shell: CMD /C  "{{ ZABBIXFOLDER }}{{ FILE_SETUP }}zabbix_agentd.exe --config {{ ZABBIXFOLDER }}{{ fILE_CONF }}zabbix_agentd.conf --start"
+
+# MO port firewall
+- name: Add firewall rule
   win_firewall_rule:
-    name: 'Zabbix-Agent'
-    localport: '{{ LISTENPORT }}'
+    name: Zabbix-Agent
+    localport: "{{ LISTENPORT }}"
     action: allow
     direction: in
     protocol: tcp
-    remoteip: '{{ SERVER }}'
+    remoteip: "{{ SERVER }}"
     state: present
     enabled: true
-  notify:
-    - Restart-Zabbix
 
+
+# check status Agent Zabbix
 - name: Check Service status
-  win_shell: Get-Service "Zabbix Agent"
+  win_shell: Get-Service 'Zabbix Agent'
   register: status
 
+# Show ket qua check status
 - debug: msg={{ status.stdout_lines }}
