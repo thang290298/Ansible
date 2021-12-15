@@ -1,6 +1,6 @@
 ---
-- name: Restart-Zabbix
+- name: Restart-nxlog
   win_service:
-    name: Zabbix Agent
+    name: nxlog
     state: restarted
 
