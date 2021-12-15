@@ -1,7 +1,0 @@
----
-- name: Setup Nxlog on Windows Server
-  hosts: Winserver
-  become: yes
-
-  roles:
-      - nxlog

@@ -1,5 +1,0 @@
----
-INSTALLDIR: C:\Nxlog\
-file_config: conf\
-Folder_Agent: C:\AgentNxlog\
-Agent_Nxlog: nxlog-trial-5.4.7313_windows_x64.msi

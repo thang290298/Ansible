@@ -1,0 +1,54 @@
+---
+# Create Folder Setup Agent Zabbix
+- name: Create folder install Agent Zabbix
+  win_file:
+    path: "{{ ZABBIXFOLDER }}"
+    state: directory
+  register: Create_folder
+
+# Coppy file Agent Zabbix
+- name: Coppy file zabbix-agent.zip
+  win_copy:
+    src: "files/zabbix_agent.zip"
+    dest: "{{ ZABBIXFOLDER }}"
+  when: Create_folder is changed
+  register: coppy_agent
+
+- name: Unzip zabbix-agent
+  win_unzip:
+    src: "{{ ZABBIXFOLDER }}\zabbix_agent.zip"
+    dest: "{{ ZABBIXFOLDER }}"
+    delete_archive: true
+  when: coppy_agent is changed
+  register: unzip_zabbix_agent
+
+# Coppy file zabbix_agentd.conf
+- name: Coppy file zabbix_agentd.conf
+  win_template:
+    src: "templates/zabbix_agentd.conf.j2"
+    dest: "{{ fILE_CONF }}\zabbix_agentd.conf"
+    force: true
+
+
+- name: Install Agent Zabbix
+  win_shell: "{{ FILE_SETUP }}\zabbix_agentd.exe --config {{ fILE_CONF }}\zabbix_agentd.conf --config"
+  when: unzip_zabbix_agent is changed
+
+- name: Add firewall rule 
+  win_firewall_rule:
+    name: 'Zabbix-Agent'
+    localport: '{{ LISTENPORT }}'
+    action: allow
+    direction: in
+    protocol: tcp
+    remoteip: '{{ SERVER }}'
+    state: present
+    enabled: true
+  notify:
+    - Restart-Zabbix
+
+- name: Check Service status
+  win_shell: Get-Service "Zabbix Agent"
+  register: status
+
+- debug: msg={{ status.stdout_lines }}

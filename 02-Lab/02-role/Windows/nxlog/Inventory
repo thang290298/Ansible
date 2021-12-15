@@ -1,0 +1,7 @@
+[Winserver]
+Winserver2016 ansible_host=172.16.7.5
+[Winserver:vars]
+ansible_user: Administrator
+ansible_password: 0962012918tT#
+ansible_connection: winrm
+ansible_port: 5985
