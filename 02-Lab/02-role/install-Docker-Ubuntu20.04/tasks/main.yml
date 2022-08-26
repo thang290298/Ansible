@@ -14,36 +14,34 @@
 
 - name: Install packages necessary for APT to use a repository over HTTPS
   apt:
-    pkg:
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - software-properties-common
+    name: "{{ docker_required_packages }}"
     update_cache: yes
     install_recommends: no
     state: present
 
 - name: Add official Docker GPG key
   apt_key:
-    url: "https://download.docker.com/linux/ubuntu/gpg"
+    url: "{{ docker_gpg_url }}"
     state: present
   when: ansible_distribution == 'Ubuntu'
 
 # cài đặt APT repository
 - name: Add official Docker APT repository
   apt_repository:
-    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    repo: "{{ docker_repo }}"
     state: present
     filename: 'docker-official'
     update_cache: yes
   when: ansible_distribution == 'Ubuntu'
 
+- name: Install Python Docker module
+  pip:
+    name: docker
+
 # Cài đặt docker
-- name: Install docker-ce and docker-compose
+- name: Install docker-ce
   apt:
-    pkg:
-      - docker-ce
-      - docker-compose
+    name: "{{ docker_packges }}"
     update_cache: yes
     install_recommends: yes
     state: present
@@ -54,6 +52,42 @@
     name: "{{ group_user }}"
     groups: docker
     append: yes
+
+# Cài đặt docker-compose
+- name: Install docker-compose
+  get_url:
+    url: "{{ docker_compose_url }}"
+    dest: /usr/local/bin/docker-compose
+    mode: u+x,g+x,o+x
+
+# kiểm tra trạng thái docker sau khi cài đặt
+- name: check version docker is installed
+  shell: command docker -v
+  register: print_version_docker
+  ignore_errors: yes
+- name: check version docker-compose is installed
+  shell: command docker-compose version
+  register: print_version_docker_compose
+  ignore_errors: yes
+- debug: msg="{{ print_version_docker.stdout }}"
+- debug: msg="{{ print_version_docker_compose.stdout }}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # kiểm tra trạng thái docker sau khi cài đặt
 - name: checking service status docker
@@ -67,12 +101,3 @@
   debug:
    var: result
 
-# kiểm tra phiên bản cài đặt
-- name: checking version docker
-  command: docker -v
-  register: version
-  ignore_errors: yes
-
-- name: showing report
-  debug:
-   var: version
